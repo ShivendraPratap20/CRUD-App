@@ -1,0 +1,47 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.card{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.col-md-4{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding-left:5px;
+}
+input{
+    border:none;
+    display:none;
+    width:100%;
+    overflow: visible;
+}
+ input{
+    margin:0;
+}
+#lgtBtn{
+    margin:auto;
+}
+#language-change{
+    display: none;
+}
+#language-change input{
+    display: inline-block;
+}
+.btnHolder{
+    padding:10px;
+    display:flex;
+    justify-content:space-around;
+}
+#savBtn{
+    display: none;
+}
