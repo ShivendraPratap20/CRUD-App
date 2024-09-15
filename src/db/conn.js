@@ -1,6 +1,5 @@
 const mong = require("mongoose");
-const DB = `mongodb+srv://crudDatabase:jraa80fBEAspTugt@cluster0.oeakm.mongodb.net/mongooseTut?retryWrites=true&w=majority&appName=Cluster0`
-const DBlocal = "mongodb://127.0.0.1:27017/mongooseTut";
+const DB = process.env.DB_CON;
 mong.connect(DB)
 .then(()=>{
     console.log(`Database connection established`);

@@ -22,7 +22,7 @@ document.getElementById("signUpForm").addEventListener("submit", (event)=>{
     for(let x in data) console.log(x = data[x]);
 
     const xhr = new XMLHttpRequest();
-    xhr.open("POST","http://localhost:8000/data", false);
+    xhr.open("POST","https://crud-app-vcjm.onrender.com/data", false);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.onreadystatechange = function(){
         const respone = JSON.parse(xhr.responseText);
@@ -41,7 +41,7 @@ document.getElementById("signInForm").addEventListener("submit",(event)=>{
     const signInCredentials     = {userId, pass};
     console.log(signInCredentials);
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', "http://localhost:8000/", false);
+    xhr.open('POST', "https://crud-app-vcjm.onrender.com/", false);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.onload = function(){
         if(xhr.status == 404) document.getElementById("emailError").style.display = "block";
