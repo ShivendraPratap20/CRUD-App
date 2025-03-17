@@ -1,6 +1,6 @@
 const mong = require("mongoose");
 const DB = process.env.DB_CON;
-mong.connect("mongodb+srv://crudDatabase:jraa80fBEAspTugt@cluster0.oeakm.mongodb.net/mongooseTut?retryWrites=true&w=majority&appName=Cluster0",{
+mong.connect("mongodb+srv://crudDatabase:jraa80fBEAspTugt@cluster0.g2ef2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",{
     serverSelectionTimeoutMS: 60000
 })
 .then(()=>{
