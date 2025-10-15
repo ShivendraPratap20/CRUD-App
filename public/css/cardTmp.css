@@ -1,47 +1,85 @@
-*{
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
-body{
+
+body {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
-.card{
+
+.card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.col-md-4{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding-left:5px;
+
+.col-md-4 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 5px;
 }
-input{
-    border:none;
-    display:none;
-    width:100%;
+
+.profile-pic {
+    position: relative;
+}
+
+#icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+
+input {
+    border: none;
+    display: none;
+    width: 100%;
     overflow: visible;
 }
- input{
-    margin:0;
+
+input {
+    margin: 0;
 }
-#lgtBtn{
-    margin:auto;
+
+#lgtBtn {
+    margin: auto;
 }
-#language-change{
+
+#language-change {
     display: none;
 }
-#language-change input{
+
+#language-change input {
     display: inline-block;
 }
-.btnHolder{
-    padding:10px;
-    display:flex;
-    justify-content:space-around;
+
+.btnHolder {
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
 }
-#savBtn{
+
+#savBtn {
     display: none;
+}
+
+.profile-pic:hover::before {
+    content: "";
+    width: 100%;
+    cursor: pointer;
+    height: 100%;
+    border-radius: 50%;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.19);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.profile-pic:hover #icon{
+    display: block;
 }

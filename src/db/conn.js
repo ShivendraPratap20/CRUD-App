@@ -1,6 +1,6 @@
 const mong = require("mongoose");
 const DB = process.env.DB_CON;
-mong.connect("mongodb+srv://crudDatabase:jraa80fBEAspTugt@cluster0.g2ef2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",{
+mong.connect("mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.2.10",{
     serverSelectionTimeoutMS: 60000
 })
 .then(()=>{

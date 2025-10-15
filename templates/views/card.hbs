@@ -14,7 +14,12 @@
     <div class="card mb-3" style="max-width: 570px;">
         <div class="row g-0">
             <div class="col-md-4">
-                <img src="/images/man.png" class="img-fluid rounded-start" alt="...">
+                <div class="profile-pic">
+                    <form id="icon">
+                        <input type="file" name="profile-pic" id="profile-pic" class="form-control">
+                    </form>
+                    <img src="/images/man.png" id="profile-img" class="img-fluid rounded-start" alt="...">
+                </div>
             </div>
             <div class="col-md-8">
                 <div class="card-body">
@@ -59,7 +64,7 @@
             </div>
         </div>
     </div>
-    <button type="button" class="btn btn-outline-danger" id="lgtBtn">LogOut</button>    
+    <button type="button" class="btn btn-outline-danger" id="lgtBtn">LogOut</button>
 </body>
 <script src="/js/cardJS.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

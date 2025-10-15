@@ -1,18 +1,21 @@
 const jwt = require("jsonwebtoken");
-const FormSchema = require("../db/models/model");
+const userModel = require("../db/models/model");
 
 const auth = async (req, res, next) => {
     try {
         const token = req.cookies.jwt;
-            const verifyUser = jwt.verify(token, "asdfghjklqwertyuiopzxcvbnmasdfghjkl");
-            const userData = await FormSchema.find({ _id: verifyUser._id });
-            (userData[0] != undefined) ? res.render("card.hbs", userData[0]) : res.render("form.hbs");
-            req.token = token;
+        const verifyUser = jwt.verify(token, process.env.SECRET_KEY);
+        const userData = await userModel.find({ _id: verifyUser._id });
+        if(userData[0] != undefined){
+            req.authorize = true;
             req.userData = userData;
-            next();
+        }else{
+            req.authorize=false;
+        }
+        next();
     } catch (error) {
         console.log(`Error occured in auth ${error}`);
-        res.render("form.hbs");
+        next();
     }
 }
 module.exports = auth;

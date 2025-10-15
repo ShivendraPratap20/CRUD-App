@@ -1,11 +1,13 @@
 
 const userEmail = document.getElementById("email").value;
+const imgInput = document.getElementById("profile-pic");
+const profileImg = document.getElementById("profile-img");
 let oldEmail;
 const data = {userEmail};
 console.log(data.userEmail);
 document.getElementById("delBtn").addEventListener("click", ()=>{
     const xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "https://crud-app-vcjm.onrender.com/deleteData", true);
+    xhr.open("DELETE", "http://localhost:8000/deleteData", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.onload = function(){
         if(xhr.status >= 200 && xhr.status <400){
@@ -61,7 +63,7 @@ document.getElementById("savBtn").addEventListener("click", ()=>{
     const updatedData = {oldEmail, fullName, profession, language, address, phone, email};
     console.log(updatedData);
     const xhr = new XMLHttpRequest();
-    xhr.open("PUT", "https://crud-app-vcjm.onrender.com/updateData", true);
+    xhr.open("PUT", "http://localhost:8000/updateData", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.send(JSON.stringify(updatedData));
     document.getElementById("language-holder").style.display = "block";
@@ -70,7 +72,11 @@ document.getElementById("savBtn").addEventListener("click", ()=>{
 });
 document.getElementById("lgtBtn").addEventListener("click", ()=>{
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://crud-app-vcjm.onrender.com/logout", false);
+    xhr.open("GET", "http://localhost:8000/logout", false);
     xhr.send();
     window.location.reload();
 });
+
+imgInput.addEventListener("change",()=>{
+    profileImg.src = URL.createObjectURL(imgInput.files[0]);
+})
