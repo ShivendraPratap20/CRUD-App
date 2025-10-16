@@ -1,6 +1,6 @@
 const userModel = require("../db/models/model");
 const bcrypt = require("bcryptjs");
-
+const { cloudinary } = require("../util/profilePic");
 
 const landing = (req, res) => {
     if (req.authorize) {
@@ -60,8 +60,10 @@ const signup = async (req, res) => {
 const modify = async (req, res) => {
     try {
         let lang = [];
-        console.log(req.body);
-        ((req.body.language).length == 0) ? lang = loginData.languages : lang = req.body.language;
+        console.log(req.file);
+        const picResult = await cloudinary.uploader.upload(req.file.path);
+        //console.log(picResult.secure_url);
+        //((req.body.language).length == 0) ? lang = loginData.languages : lang = req.body.language;
         const updateResult = await userModel.findOneAndUpdate(
             { email: req.body.oldEmail },
             {
@@ -76,7 +78,7 @@ const modify = async (req, res) => {
             },
             { new: true }
         );
-        console.log(`Data updated ${updateResult}`);
+        res.json({status: "SUCCESS", data: picResult.secure_url})
     } catch (error) {
         console.log(`Error occured while updating the data ${error}`);
     }

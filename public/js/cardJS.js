@@ -1,36 +1,39 @@
-
 const userEmail = document.getElementById("email").value;
 const imgInput = document.getElementById("profile-pic");
 const profileImg = document.getElementById("profile-img");
 let oldEmail;
-const data = {userEmail};
-console.log(data.userEmail);
-document.getElementById("delBtn").addEventListener("click", ()=>{
+const data = { userEmail };
+
+imgInput.addEventListener("change", () => {
+    profileImg.src = URL.createObjectURL(imgInput.files[0]);
+});
+
+document.getElementById("delBtn").addEventListener("click", () => {
     const xhr = new XMLHttpRequest();
     xhr.open("DELETE", "http://localhost:8000/deleteData", true);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhr.onload = function(){
-        if(xhr.status >= 200 && xhr.status <400){
+    xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 400) {
             console.log(`Data deleted successfully`);
             window.location.href = '/';
-        }else{
+        } else {
             console.log(`Error deleting data ${xhr.statusText}`);
         }
     };
-    xhr.onerror = function(){
+    xhr.onerror = function () {
         console.log(`Request failed`);
     };
     xhr.send(JSON.stringify(data));
 });
 
-document.getElementById("mdyBtn").addEventListener('click', ()=>{
+document.getElementById("mdyBtn").addEventListener('click', () => {
     oldEmail = document.getElementById("email").value;
     const info = document.getElementsByClassName("info");
-    for(var i=0;i<info.length;i++){
+    for (var i = 0; i < info.length; i++) {
         info[i].style.display = "none"
     }
     const arr = document.getElementsByTagName("input");
-    for(var i=0;i<arr.length;i++){
+    for (var i = 0; i < arr.length; i++) {
         arr[i].style.display = "block";
         arr[i].readOnly = false;
         arr[i].focus();
@@ -41,42 +44,47 @@ document.getElementById("mdyBtn").addEventListener('click', ()=>{
         document.getElementById("language-change").style.display = "block";
     }
 });
-document.getElementById("savBtn").addEventListener("click", ()=>{
-    
+document.getElementById("savBtn").addEventListener("click", () => {
+
     document.getElementById("savBtn").style.display = "none";
     document.getElementById("mdyBtn").style.display = "block";
     document.getElementById("delBtn").style.display = "block";
     const arr = document.getElementsByTagName("input");
-    for(var i=0;i<arr.length;i++){
+    for (var i = 0; i < arr.length; i++) {
         arr[i].readOnly = true;
     }
-    const fullName          = document.getElementById("fullName").value;
-    const profession        = document.getElementById("profession").value;
-    const checkButton       = document.getElementsByName("language");
-    const address           = document.getElementById("address").value;
-    const phone             = document.getElementById("phone").value;
-    const email             = document.getElementById("email").value;
+    const fullName = document.getElementById("fullName").value;
+    const profession = document.getElementById("profession").value;
+    const checkButton = document.getElementsByName("language");
+    const address = document.getElementById("address").value;
+    const phone = document.getElementById("phone").value;
+    const email = document.getElementById("email").value;
     let language = [];
-    for(let check of checkButton){
-        if(check.checked) language.push(check.value);
+    for (let check of checkButton) {
+        if (check.checked) language.push(check.value);
     }
-    const updatedData = {oldEmail, fullName, profession, language, address, phone, email};
-    console.log(updatedData);
+    const formData = new FormData();
+    formData.append('oldEmail', oldEmail);
+    formData.append('fullName', fullName);
+    formData.append('profession', profession);
+    formData.append('language', language);
+    formData.append('address', address);
+    formData.append('phone', phone);
+    formData.append('email', email);
+    formData.append('profilePic', imgInput.files[0]);
     const xhr = new XMLHttpRequest();
     xhr.open("PUT", "http://localhost:8000/updateData", true);
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhr.send(JSON.stringify(updatedData));
+    xhr.onload = function () {
+    const res = JSON.parse(xhr.responseText);
+    console.log(res);
+    xhr.send(formData);
     document.getElementById("language-holder").style.display = "block";
     document.getElementById("language-change").style.display = "none";
     window.location.reload();
 });
-document.getElementById("lgtBtn").addEventListener("click", ()=>{
+document.getElementById("lgtBtn").addEventListener("click", () => {
     const xhr = new XMLHttpRequest();
     xhr.open("GET", "http://localhost:8000/logout", false);
     xhr.send();
     window.location.reload();
 });
-
-imgInput.addEventListener("change",()=>{
-    profileImg.src = URL.createObjectURL(imgInput.files[0]);
-})
