@@ -11,17 +11,17 @@ const landing = (req, res) => {
 
 const login = async (req, res) => {
     try {
-        const {userId, pass} = req.body;
+        const { userId, pass } = req.body;
         const result = await userModel.find({ email: userId });
         if (result[0] == undefined) {
-           res.status(404).json({status:"FAILED", message:"User doesn't exists"});
-           return;
+            res.status(404).json({ status: "FAILED", message: "User doesn't exists" });
+            return;
         }
         const isMatch = await bcrypt.compare(pass, result[0].password);
         if (!isMatch) {
-            res.status(401).json({status:"FAILED", message:"Password incorrect"});
+            res.status(401).json({ status: "FAILED", message: "Password incorrect" });
             return;
-        } 
+        }
         const token = await result[0].authToken();
         res.cookie("jwt", token);
         res.redirect("/");
@@ -33,7 +33,7 @@ const login = async (req, res) => {
 
 const signup = async (req, res) => {
     try {
-        const {fullName, email, password, confirmPassword, gender, profession, phone, address} = req.body;
+        const { fullName, email, password, confirmPassword, gender, profession, phone, address } = req.body;
         const result = new userModel({
             fullName,
             email,
@@ -78,7 +78,7 @@ const modify = async (req, res) => {
             },
             { new: true }
         );
-        res.json({status: "SUCCESS", data: picResult.secure_url})
+        res.json({ status: "SUCCESS", data: picResult.secure_url })
     } catch (error) {
         console.log(`Error occured while updating the data ${error}`);
     }
@@ -106,11 +106,22 @@ const logout = async (req, res) => {
     }
 }
 
+const googleLoginHandler = async (req, res) => {
+    try {
+        console.log('Google request made');
+        res.status(302).redirect(`https://accounts.google.com/o/oauth2/v2/auth?client_id=891396938867-dpj67qv5erfls193havvnka60patm19s.apps.googleusercontent.com&redirect_uri=http://localhost:8000/auth/google/callback&response_type=code&scope=openid email profile&state=RANDOM_STRING`
+                            )
+    } catch (error) {
+        console.log(`Error while login in with google ${error}`)
+    }
+};
+
 module.exports = {
     landing,
     login,
     signup,
     modify,
     remove,
-    logout
+    logout,
+    googleLoginHandler
 };

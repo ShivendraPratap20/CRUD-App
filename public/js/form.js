@@ -66,3 +66,7 @@ switchButton.addEventListener('click', ()=>{
         loginContainer.style.display = "block";  
     }
 });
+
+document.getElementById("gleLgBtn").addEventListener("click", ()=>{
+    window.location.href = 'http://localhost:8000/googleSignIn'
+});

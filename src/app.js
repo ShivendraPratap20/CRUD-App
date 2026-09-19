@@ -1,7 +1,7 @@
-require('dotenv').config({path:"C:/Users/user/Documents/CRUD/.env"});
 const express = require('express');
 const app = express();
 const path = require('path');
+require('dotenv').config({path:path.join(__dirname, '/.env')});
 const cors = require('cors');
 const PORT = process.env.port || 8000;
 require('./db/conn.js');
