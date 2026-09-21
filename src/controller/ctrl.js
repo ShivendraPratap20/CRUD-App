@@ -1,6 +1,7 @@
 const userModel = require("../db/models/model");
 const bcrypt = require("bcryptjs");
 const { cloudinary } = require("../util/profilePic");
+const { OAuth2Client } = require("google-auth-library");
 
 const landing = (req, res) => {
     if (req.authorize) {
@@ -109,10 +110,72 @@ const logout = async (req, res) => {
 const googleLoginHandler = async (req, res) => {
     try {
         console.log('Google request made');
-        res.status(302).redirect(`https://accounts.google.com/o/oauth2/v2/auth?client_id=891396938867-dpj67qv5erfls193havvnka60patm19s.apps.googleusercontent.com&redirect_uri=http://localhost:8000/auth/google/callback&response_type=code&scope=openid email profile&state=RANDOM_STRING`
-                            )
+        const params = new URLSearchParams({
+            client_id: process.env.GOOGLE_CLIENT_ID,
+            redirect_uri: 'http://localhost:8000/auth/google/callback',
+            response_type: 'code',
+            scope: 'openid email profile',
+            state: "RANDOM_STRING",
+        });
+
+        res.redirect(`https://accounts.google.com/o/oauth2/v2/auth?${params}`);
     } catch (error) {
         console.log(`Error while login in with google ${error}`)
+    }
+};
+
+const googleCallbackHandler = async (req, res) => {
+    try {
+        const { code, state } = req.query;
+
+        const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                code,
+                client_id: process.env.GOOGLE_CLIENT_ID,
+                client_secret: process.env.GOOGLE_CLIENT_SECRET,
+                redirect_uri: 'http://localhost:8000/auth/google/callback',
+                grant_type: 'authorization_code',
+            }),
+        });
+
+        if (!tokenResponse.ok) {
+            return res.status(400).send('Token exchange failed')
+        }
+
+        const tokens = await tokenResponse.json();
+        // tokens = { access_token, id_token, expires_in, scope, token_type, refresh_token? }
+
+        const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+        const ticket = await client.verifyIdToken({
+            idToken: tokens.id_token,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+        const { sub, email, name, picture, email_verified } = payload;
+
+        if (!email_verified) {
+            return res.status(400).send('Email not verified by Google');
+        }
+
+        let user = await userModel.findOne({ email: email });
+        if (!user) {
+            const result = new userModel({
+                fullName: name,
+                email,
+            });
+            user = await result.save();
+        }
+        console.log(`User is ${user}`)
+        const token = await user.authToken();
+        res.cookie("jwt", token);
+        res.redirect("/");
+
+    } catch (error) {
+        console.log(`Error occured while handling google callback ${error}`)
+        res.status(500).send(JSON.stringify({ status: false, message: `${error}` }));
+
     }
 };
 
@@ -123,5 +186,6 @@ module.exports = {
     modify,
     remove,
     logout,
-    googleLoginHandler
+    googleLoginHandler,
+    googleCallbackHandler
 };

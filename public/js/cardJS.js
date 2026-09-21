@@ -81,7 +81,7 @@ document.getElementById("savBtn").addEventListener("click", () => {
     document.getElementById("language-holder").style.display = "block";
     document.getElementById("language-change").style.display = "none";
     window.location.reload();
-});
+}});
 document.getElementById("lgtBtn").addEventListener("click", () => {
     const xhr = new XMLHttpRequest();
     xhr.open("GET", "http://localhost:8000/logout", false);
